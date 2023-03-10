@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+set -vx
+
+bundle exec appraisal install
+# XXX: to download private gems
+bundle exec appraisal bundle install
+bundle exec appraisal rspec

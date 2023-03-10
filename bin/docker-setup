@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+set -vx
+
+
+SCRIPT_REALPATH=$( realpath "$0"  )
+SCRIPT_DIR=$( dirname "$SCRIPT_REALPATH" )
+
+GIT_PRE_COMMIT_HOOK_FILE=$( realpath "${SCRIPT_DIR}/../.git/hooks/pre-commit" )
+
+__install-pre-commit() {
+  echo "installing git pre-commit hook..."
+
+  curl \
+    -fSL https://gist.githubusercontent.com/ppdeassis/48387d9f49b41af23e7d/raw/bfb0c8adb6fe57e965395dc2f4a6b3e6d0004128/pre-commit \
+    -o "${GIT_PRE_COMMIT_HOOK_FILE}" \
+  && chmod +x "${GIT_PRE_COMMIT_HOOK_FILE}"
+}
+
+[[ -f "${GIT_PRE_COMMIT_HOOK_FILE}" ]] || __install-pre-commit
+
+# git submodules
+git submodule update --init --recursive
+
+# ssh keys
+[[ -f .docker/.ssh/id_rsa ]] || cp ~/.ssh/id_rsa .docker/.ssh/id_rsa
+
+
+# create commands docker network if not already created
+docker network inspect commands > /dev/null || \
+  docker network create \
+    --driver=bridge \
+    --subnet=172.32.237.0/24 \
+    commands
+
+
+# making sure nothing is up
+docker compose down -v
+
+# setup
+docker compose build --no-cache commands
+docker compose run --rm commands bin/setup
+
+docker compose down
+
+echo "done!"

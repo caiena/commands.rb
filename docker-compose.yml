@@ -1,0 +1,26 @@
+#
+# Arquivo docker-compose para ambiente de desenvolvimento
+##
+---
+networks:
+  default:
+    name: commands
+    external: true
+
+volumes:
+  bundler_data:
+
+services:
+  commands:
+    image: "commands:local"
+    tty: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # TIP: exporte esses valores no seu ~/.bashrc
+        APP_USER_UID:  ${DOCKER_USER_UID:-1000}
+        APP_GROUP_GID: ${DOCKER_GROUP_GID:-1000}
+    volumes:
+      - bundler_data:/app/vendor/
+      - .:/app

@@ -7,7 +7,44 @@
 /spec/reports/
 /tmp/
 
-.tool-versions
-
 # rspec failure tracking
 .rspec_status
+
+/.bundle
+/vendor/*
+
+# appraisal
+/gemfiles/.bundle
+/gemfiles/vendor/
+/gemfiles/*gemfile.lock
+
+# Ignore all logfiles and tempfiles.
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+
+# dotenv, docker-compose
+.env*
+!.env*.sample
+
+
+# docker
+# ---
+
+# Ignore docker config directory
+/.docker/*
+!/.docker/.empty/
+!/.docker/.ssh/
+/.docker/.empty/*
+/.docker/.ssh/*
+!/.docker/.empty/.keep
+!/.docker/.ssh/.keep
+!/.docker/bin
+!/.docker/config
+
+
+!.keep
+
+# ASDF
+.tool-versions
