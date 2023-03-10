@@ -4,22 +4,58 @@ A gem `Commands` tem como objetivo disponibilizar:
   - Uma _classe_ base `Commands::Command` para comandos
   - Um _módulo_ `Commands::Commander` para expor comandos como métodos de instâncias
 
+---
 
-## Utilização
+## Instalação
 
-### Adicionando a _gem_ ao projeto Rails:
+<details>
+<summary>
+  Utilizando Docker
+</summary>
 
-- Adicione a seguinte linha no `Gemfile` definindo a branch de release adequada:
+O projeto pode ser configurado via docker. A seguir estão os passos para a configuração:
+
+1. Adicione uma chave privada do git no diretório `.docker/.ssh` para ser copiada para dentro do container
+  > Obs.: Caso já tenha uma chave id_rsa no diretório `~/.ssh` de sua máquina, o script já irá copiá-lo automaticamente para dentro da pasta `.docker/.ssh`
+
+2. Na raiz do projeto execute o comando `bin/docker-setup` e toda a configuração do docker será realizada
+
+3. Após executar o comando da etapa dois, o projeto estará pronto para ser utilizado. Nenhum container estará ativo, mas existem no projeto alguns comandos para facilitar o uso:
+
+    - `bin/docker-up`: Inicia o container do projeto no modo `--detach` ou `-d`
+    - `bin/docker-down`: Interrompe o container do projeto
+    - `bin/docker-guard`: Inicia o `guard` para execução dos testes
+    - `bin/docker-bash`: Acessa o bash do container
+    - `bin/docker-sync`: Sincroniza o projeto novamente
+
+</details>
+
+
+<details>
+<summary>
+  Não utilizando Docker
+</summary>
+
+Se preferir não utilizar docker, pode-se adicionar a seguinte linha no `Gemfile` definindo a branch de release adequada:
   ```ruby
     gem 'commands', git: 'git@github.com:caiena/commands.rb.git', branch: 'release-0.1'
   ```
 
-- Execute o seguinte comando no diretório raiz do projeto Rails:
+Execute o seguinte comando no diretório raiz do projeto Rails:
   ```
     bundle install
-    ```
+  ```
 
-### _Classe_ `Commands::Command`:
+</details>
+
+---
+
+## Utilização
+
+<details>
+<summary>
+  Classe Commands::Command
+</summary>
 
 - Utilize a _classe_ `Commands::Command` como _classe_ pai de outra classe desejada:
   ```ruby
@@ -106,9 +142,13 @@ A gem `Commands` tem como objetivo disponibilizar:
     # Resultado do processamento do comando
     result = example.result
   ```
+</details>
 
 
-### _Módulo_ `Commands::Commander`:
+<details>
+<summary>
+  Módulo Commands::Commander
+</summary>
 
 - Inclua o _módulo_ `Commands::Commander` na classe desejada
   ```ruby
@@ -150,3 +190,6 @@ A gem `Commands` tem como objetivo disponibilizar:
     # Lança uma exceção Commands::Command::CommandInvalid se falhar
     example.my_command!(arg1: 100, arg2: "teste")
   ```
+</details>
+
+---
