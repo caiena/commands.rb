@@ -6,21 +6,25 @@ A gem `Commands` tem como objetivo disponibilizar:
 
 ---
 
-## Instalação
+## Desenvolvimento
 
-<details>
-<summary>
-  Utilizando Docker
-</summary>
+### Docker
 
 O projeto pode ser configurado via docker. A seguir estão os passos para a configuração:
 
 1. Adicione uma chave privada do git no diretório `.docker/.ssh` para ser copiada para dentro do container
-  > Obs.: Caso já tenha uma chave id_rsa no diretório `~/.ssh` de sua máquina, o script já irá copiá-lo automaticamente para dentro da pasta `.docker/.ssh`
+  > Obs.: Caso já tenha uma chave id_rsa no diretório `~/.ssh` de sua máquina, o script, a ser executado nos próximos passos, já irá copiá-lo, automaticamente, para dentro da pasta `.docker/.ssh`
 
-2. Na raiz do projeto execute o comando `bin/docker-setup` e toda a configuração do docker será realizada
+2. Adicionar as seguintes linhas no arquivo `~/.bashrc` ou `~/.bash_profile`
 
-3. Após executar o comando da etapa dois, o projeto estará pronto para ser utilizado. Nenhum container estará ativo, mas existem no projeto alguns comandos para facilitar o uso:
+```bash
+  export DOCKER_USER_UID=$(id -u)
+  export DOCKER_GROUP_GID=$(id -g)
+```
+
+3. Na raiz do projeto execute o comando `bin/docker-setup` e toda a configuração do docker será realizada
+
+4. Após executar o comando da etapa anterior, o projeto estará pronto para ser utilizado. Existem no projeto alguns comandos para facilitar o uso no dia-a-dia:
 
     - `bin/docker-up`: Inicia o container do projeto no modo `--detach` ou `-d`
     - `bin/docker-down`: Interrompe o container do projeto
@@ -28,52 +32,49 @@ O projeto pode ser configurado via docker. A seguir estão os passos para a conf
     - `bin/docker-bash`: Acessa o bash do container
     - `bin/docker-sync`: Sincroniza o projeto novamente
 
-</details>
+---
 
+## Instalação
 
-<details>
-<summary>
-  Não utilizando Docker
-</summary>
+### Utilizando a gem
 
-Se preferir não utilizar docker, pode-se adicionar a seguinte linha no `Gemfile` definindo a branch de release adequada:
-  ```ruby
-    gem 'commands', git: 'git@github.com:caiena/commands.rb.git', branch: 'release-0.1'
-  ```
+Adicione a seguinte linha no `Gemfile` definindo a branch de release adequada:
 
+```ruby
+  gem 'commands', git: 'git@github.com:caiena/commands.rb.git', branch: 'release-0.1'
+```
+   
 Execute o seguinte comando no diretório raiz do projeto Rails:
-  ```
-    bundle install
-  ```
 
-</details>
+```
+  bundle install
+```
 
 ---
 
 ## Utilização
 
-<details>
-<summary>
-  Classe Commands::Command
-</summary>
+### Classe Commands::Command
 
 - Utilize a _classe_ `Commands::Command` como _classe_ pai de outra classe desejada:
-  ```ruby
-    class Example < Commands::Command
-      # resto do código
-    end
-  ```
+
+```ruby
+  class Example < Commands::Command
+    # resto do código
+  end
+```
 
 - Implemente o método `call`:
-  ```ruby
-    class Example < Commands::Command
-      def call
-        # implemente a lógica
-      end
 
-      # resto do código
+```ruby
+  class Example < Commands::Command
+    def call
+      # implemente a lógica
     end
-  ```  
+
+    # resto do código
+  end
+```  
 
 - Uma vez que uma _classe_ herda da _classe_ `Commands::Command`, alguns métodos de instância se tornam disponíveis:
   - `success?`
@@ -142,13 +143,10 @@ Execute o seguinte comando no diretório raiz do projeto Rails:
     # Resultado do processamento do comando
     result = example.result
   ```
-</details>
 
+---
 
-<details>
-<summary>
-  Módulo Commands::Commander
-</summary>
+### Módulo Commands::Commander
 
 - Inclua o _módulo_ `Commands::Commander` na classe desejada
   ```ruby
