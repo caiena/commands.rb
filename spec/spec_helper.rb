@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
 require "commands"
+require "commands/support/rspec/matchers"
 
 RSpec.configure do |config|
-  config.include Commands::Rspec::DefineCommand
+  config.include Commands::Support::RSpec::Matchers::DefineCommand
+  config.include Commands::Support::RSpec::Matchers::DefineClassCommand
+  config.include Commands::Support::RSpec::Matchers::Execute
 
   # Enable flags like --only-failures and --next-failure
   config.example_status_persistence_file_path = ".rspec_status"

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe Commands::Command do 
+RSpec.describe Commands::Command do
   let(:command_options) do
     { attr1: 1, attr2: "" }
   end
@@ -13,7 +13,7 @@ RSpec.describe Commands::Command do
         "some value"
       end
     end
-    
+
     ExampleCommand.new command_options
   end
 
@@ -26,10 +26,10 @@ RSpec.describe Commands::Command do
         "some value"
       end
     end
-    
+
     ExampleCommand.new command_options
   end
-  
+
   let(:command_without_call) { described_class.new command_options }
 
   describe "initialize" do
@@ -41,11 +41,11 @@ RSpec.describe Commands::Command do
       end
     end
   end
-  
+
   describe "methods" do
     describe "call" do
       subject(:call) { command.call }
-  
+
       context "when call is not overridden" do
         # @override
         let(:command) { command_without_call }
@@ -54,26 +54,26 @@ RSpec.describe Commands::Command do
           expect{ call }.to raise_error{ NotImplementedError}
         end
       end
-  
-      context "when call is overridden" do        
+
+      context "when call is overridden" do
         let(:call_result) { "some value" }
-  
+
         it "raises NotImplementedError Exception" do
           expect{ call }.not_to raise_error{ NotImplementedError}
         end
-  
+
         describe "hooks" do
           describe "method_added" do
             it "adds result`s call on result attribute" do
               call
-      
+
               expect(command.result).to eq call_result
             end
           end
         end
       end
     end
-    
+
     describe "call!" do
       subject(:call!) { command.call! }
 
@@ -98,14 +98,14 @@ RSpec.describe Commands::Command do
 
       context "when command does not have errors" do
         let(:call_result) { "some value" }
-  
+
         it { expect{ call! }.not_to raise_error{ NotImplementedError} }
-  
+
         describe "hooks" do
           describe "method_added" do
             it "adds result`s call on result attribute" do
               call!
-      
+
               expect(command.result).to eq call_result
             end
           end
@@ -129,7 +129,7 @@ RSpec.describe Commands::Command do
         it { expect(success?).to be_truthy }
       end
     end
-  
+
     describe "failure?" do
       subject(:failure?) { command.failure? }
 
@@ -152,7 +152,7 @@ RSpec.describe Commands::Command do
       subject(:read_attribute_for_validation) do
         command.read_attribute_for_validation(attribute)
       end
-      
+
       let(:attribute) { command_options.keys.sample }
 
       before { command.call }
@@ -162,7 +162,7 @@ RSpec.describe Commands::Command do
 
         it { expect(read_attribute_for_validation).to eq(:another_attr) }
       end
-      
+
       context "when attribute exists" do
         it { expect(read_attribute_for_validation).to eq(command.attr1) }
       end
@@ -172,7 +172,7 @@ RSpec.describe Commands::Command do
       context "when response has body key" do
         let(:response_data) do
           double(:response, body: {
-            "errors" => { 
+            "errors" => {
               "field_name_1" => [
                 { "error" => "invalid" }
               ],
